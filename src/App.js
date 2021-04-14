@@ -1,10 +1,42 @@
-import logo from './logo.svg';
+// import logo from './logo.svg';
+import logo from './img/logo.svg';
+import React, { useState } from "react";
 import { BrowserRouter as Router, Link, Route } from "react-router-dom";
 import './css/bootstrap.css';
+import { AuthContext } from "./context/auth";
+import PrivateRoute from "./libs/PrivateRoute";
+import Home from "./pages/Home/Home";
+import Login from './pages/Login/Login';
 
-function App() {
+function App(props) {
+  let logout_button;
+  const existingTokens = JSON.parse(localStorage.getItem("tokens"));
+  const [authTokens, setAuthTokens] = useState(existingTokens);
+
+  const setTokens = (data) => {
+    if (data) {
+      // user login
+      localStorage.setItem("tokens", JSON.stringify(data));
+    } else {
+      // user logout
+      localStorage.removeItem("tokens");
+    }
+    setAuthTokens(data);
+  };
+
+  function logOut() {
+    localStorage.clear();
+    setAuthTokens();
+  }
+
+  if (localStorage.getItem('tokens')) {
+    logout_button = <button className="nav-link active" aria-current="page" onClick={logOut}>Logout</button>;
+    // logout_button = <Button onClick={logOut}>Log out</Button>;
+  } else {
+    logout_button = "";
+  }
   return (
-    // <AuthContext.Provider value={{ authTokens, setAuthTokens: setTokens }}>
+    <AuthContext.Provider value={{ authTokens, setAuthTokens: setTokens }}>
       <Router>
         <div>
           <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -15,7 +47,7 @@ function App() {
               </button>
               <div className="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                  <li className="nav-item">
+                  {/* <li className="nav-item">
                     <Link to="/" className="nav-link active" aria-current="page">Home Page</Link>
                   </li>
                   <li className="nav-item">
@@ -29,24 +61,24 @@ function App() {
                   </li>
                   <li className="nav-item">
                     <Link to="/dashboard3" className="nav-link active" aria-current="page">Dashboard 3</Link>
-                  </li>
+                  </li> */}
                 </ul>
               </div>
-              {/* {logout_button} */}
+              {logout_button}
             </div>
           </nav>
         </div>
-        {/* <PrivateRoute exact path="/" component={Home} />
+        <PrivateRoute exact path="/" component={Home} />
         <Route path="/login" component={Login} />
-        <Route path="/signup" component={Signup} />
-        <PrivateRoute path="/admin" component={Admin} />
+        {/* <Route path="/signup" component={Signup} /> */}
+        {/* <PrivateRoute path="/admin" component={Admin} />
         <Route path="/dashboard" component={Dashboard} />
         <Route path="/dashboard2" component={Dashboard2} />
         <Route path="/dashboard3" component={Dashboard3} /> */}
 
 
       </Router>
-    // </AuthContext.Provider >
+    </AuthContext.Provider >
   );
 }
 

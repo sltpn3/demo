@@ -2,11 +2,13 @@
 import logo from './img/logo.svg';
 import React, { useState } from "react";
 import { BrowserRouter as Router, Link, Route } from "react-router-dom";
+import { Button } from 'reactstrap';
 import './css/bootstrap.css';
 import { AuthContext } from "./context/auth";
 import PrivateRoute from "./libs/PrivateRoute";
 import Home from "./pages/Home/Home";
 import Login from './pages/Login/Login';
+import Signup from './pages/Signup/Signup'
 
 function App(props) {
   let logout_button;
@@ -30,7 +32,7 @@ function App(props) {
   }
 
   if (localStorage.getItem('tokens')) {
-    logout_button = <button className="nav-link active" aria-current="page" onClick={logOut}>Logout</button>;
+    logout_button = <Button onClick={logOut}>Logout</Button>;
     // logout_button = <Button onClick={logOut}>Log out</Button>;
   } else {
     logout_button = "";
@@ -70,7 +72,7 @@ function App(props) {
         </div>
         <PrivateRoute exact path="/" component={Home} />
         <Route path="/login" component={Login} />
-        {/* <Route path="/signup" component={Signup} /> */}
+        <Route path="/signup" component={Signup} />
         {/* <PrivateRoute path="/admin" component={Admin} />
         <Route path="/dashboard" component={Dashboard} />
         <Route path="/dashboard2" component={Dashboard2} />

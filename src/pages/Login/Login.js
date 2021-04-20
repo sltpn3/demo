@@ -7,8 +7,6 @@ import { useAuth } from "../../context/auth";
 // import { InputGroup, Input, Button } from 'reactstrap';
 import { Form, FormGroup, Label, Input, Button, InputGroup } from "reactstrap";
 
-
-
 function Login(props) {
   console.log(props)
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -23,23 +21,7 @@ function Login(props) {
   const { REACT_APP_API_LOGIN } = process.env;
   const [errorMessage, setErrorMessage] = useState('');
 
-  function postLogin() {
-    axios.post(REACT_APP_API_LOGIN + "/login", {
-      userName,
-      password
-    }).then(result => {
-      if (result.status === 200) {
-        setAuthTokens(result.data);
-        setLoggedIn(true);
-      } else {
-        setIsError(true);
-      }
-    }).catch(e => {
-      setIsError(true);
-    });
-  }
-
-  const handleRegistration = (data) => axios.post(REACT_APP_API_LOGIN + "/login",
+  const handleLogin = (data) => axios.post(REACT_APP_API_LOGIN + "/login",
     data
   ).then(result => {
     console.log(result)
@@ -51,6 +33,12 @@ function Login(props) {
     }
   }).catch(e => {
     setIsError(true);
+    console.log(e.response);
+    if (e.response) {
+      setErrorMessage(e.response.data.message)
+    } else {
+      setErrorMessage('Network Error')
+    }
   });
 
   const handleError = (errors) => { };
@@ -76,7 +64,7 @@ function Login(props) {
     <div className="container mt-4 col-lg-2">
       <div className="text-center"><img src={logoImg} className="img-fluid" /></div>
 
-      <Form onSubmit={handleSubmit(handleRegistration, handleError)}>
+      <Form onSubmit={handleSubmit(handleLogin, handleError)}>
         <FormGroup className="text-left">
           <Input
             {...register("email", registerOptions.email)}
@@ -106,7 +94,7 @@ function Login(props) {
       </Form>
       <div className="text-center">
         <Link to="/signup">Don't have an account?</Link>
-        {isError && <div>Wrong Email or Password</div>}
+        {isError && <div>{errorMessage}</div>}
       </div>
     </div>
   );

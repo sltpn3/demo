@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Form, FormGroup, Label, Input, Button } from "reactstrap";
 import axios from 'axios';
@@ -6,8 +6,9 @@ import axios from 'axios';
 const RegisterForm = () => {
   const { REACT_APP_API_LOGIN } = process.env;
   // console.log({REACT_APP_API_LOGIN})
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors }, getValues } = useForm();
   // const handleRegistration = (data) => console.log(data);
+  const [isError, setIsError] = useState(false);
   const handleRegistration = (data) => axios.post(REACT_APP_API_LOGIN + "/register",
     data
   ).then(result => {
@@ -17,8 +18,10 @@ const RegisterForm = () => {
     } else {
       // setIsError(true);
     }
-  }).catch(e => {
-    // setIsError(true);
+  }).catch((e) => {
+    console.log(e.response);
+    setIsError(true);
+
   });
 
   const handleError = (errors) => { };
@@ -30,6 +33,16 @@ const RegisterForm = () => {
       minLength: {
         value: 8,
         message: "Password must have at least 8 characters"
+      }
+    },
+    password_repeat: {
+      required: "Please confirm password!",
+      validate: {
+        matchesPreviousPassword: (value) => {
+          const { password } = getValues();
+          return password === value || "Passwords should match!";
+
+        }
       }
     }
   };
@@ -63,6 +76,17 @@ const RegisterForm = () => {
           />
           <small className="text-danger">
             {errors.password && errors.password.message}
+          </small>
+        </FormGroup>
+        <FormGroup className="mt-4 mb-4">
+          <Label>Repeat Password</Label>
+          <Input
+            type="password"
+            name="password_repeat"
+            {...register("password_repeat", registerOptions.password_repeat)}
+          />
+          <small className="text-danger">
+            {errors.password_repeat && errors.password_repeat.message}
           </small>
         </FormGroup>
         <Button color="primary">Submit</Button>

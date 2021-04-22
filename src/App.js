@@ -4,11 +4,12 @@ import React, { useState } from "react";
 import { BrowserRouter as Router, Link, Route } from "react-router-dom";
 import { Button } from 'reactstrap';
 import './css/bootstrap.css';
+import './css/bootstrap-icons.css';
 import { AuthContext } from "./context/auth";
 import PrivateRoute from "./libs/PrivateRoute";
 import Home from "./pages/Home/Home";
 import Login from './pages/Login/Login';
-import Signup from './pages/Signup/Signup'
+import Signup from './pages/Signup/Signup';
 
 function App(props) {
   let logout_button;

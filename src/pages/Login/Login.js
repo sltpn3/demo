@@ -15,11 +15,17 @@ function Login(props) {
   // const referer = props.location.state.referer || '/';
   const [isLoggedIn, setLoggedIn] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [userName, setUserName] = useState("");
-  const [password, setPassword] = useState("");
+  // const [userName, setUserName] = useState("");
+  // const [password, setPassword] = useState("");
   const { setAuthTokens } = useAuth();
   const { REACT_APP_API_LOGIN } = process.env;
   const [errorMessage, setErrorMessage] = useState('');
+
+  const [passwordShown, setPasswordShown] = useState(false);
+
+  const togglePasswordVisiblity = () => {
+    setPasswordShown(passwordShown ? false : true);
+  };
 
   const handleLogin = (data) => axios.post(REACT_APP_API_LOGIN + "/login",
     data
@@ -66,25 +72,31 @@ function Login(props) {
 
       <Form onSubmit={handleSubmit(handleLogin, handleError)}>
         <FormGroup className="text-left">
-          <Input
-            {...register("email", registerOptions.email)}
-            className="mt-4"
-            type="email"
-            placeholder="email"
-            name="email"
-          />
+          <InputGroup className="mt-4">
+            <Input
+              {...register("email", registerOptions.email)}
+              type="email"
+              placeholder="email"
+              name="email"
+            />
+          </InputGroup>
           <small className="text-danger">
             {errors.email && errors.email.message}
           </small>
         </FormGroup>
         <FormGroup>
-          <Input
-            {...register("password", registerOptions.password)}
-            className="mt-4"
-            type="password"
-            name="password"
-            placeholder="password"
-          />
+          <InputGroup className="mt-4">
+            <Input
+              {...register("password", registerOptions.password)}
+              type={passwordShown ? "text" : "password"}
+              name="password"
+              placeholder="password"
+            />
+            <span className="input-group-text" id="basic-addon1">
+              <i className={passwordShown ? "bi bi-eye-slash" : "bi bi-eye"}
+                onClick={togglePasswordVisiblity}></i>
+            </span>
+          </InputGroup>
           <small className="text-danger">
             {errors.password && errors.password.message}
           </small>

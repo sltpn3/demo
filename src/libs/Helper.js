@@ -1,0 +1,4 @@
+export function logger(data) {
+  if (process.env.NODE_ENV === 'production') return;
+  console.log(data);
+}

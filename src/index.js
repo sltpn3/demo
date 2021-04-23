@@ -4,6 +4,14 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+function empty_console() {}
+
+if (process.env.NODE_ENV !== 'development') {
+  console.log = empty_console;
+  console.warn = empty_console;
+  console.error = empty_console;
+}
+
 ReactDOM.render(
   <React.StrictMode>
     <App />

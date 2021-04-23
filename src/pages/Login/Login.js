@@ -6,11 +6,13 @@ import { useForm } from "react-hook-form";
 import { useAuth } from "../../context/auth";
 // import { InputGroup, Input, Button } from 'reactstrap';
 import { Form, FormGroup, Label, Input, Button, InputGroup } from "reactstrap";
+// import { logger } from '../../libs/Helper';
 
 function Login(props) {
   console.log(props)
   const { register, handleSubmit, formState: { errors } } = useForm();
-  const referer = props.location.state && props.location.state.referer || '/';
+  // const referer = props.location.state && props.location.state.referer || '/';
+  const referer = props.location.state ? props.location.state.referer : '/';
   // console.log(referer);
   // const referer = props.location.state.referer || '/';
   const [isLoggedIn, setLoggedIn] = useState(false);
@@ -68,7 +70,7 @@ function Login(props) {
 
   return (
     <div className="container mt-4 col-lg-2">
-      <div className="text-center"><img src={logoImg} className="img-fluid" /></div>
+      <div className="text-center"><img alt="" src={logoImg} className="img-fluid" /></div>
 
       <Form onSubmit={handleSubmit(handleLogin, handleError)}>
         <FormGroup className="text-left">
@@ -92,9 +94,8 @@ function Login(props) {
               name="password"
               placeholder="password"
             />
-            <span className="input-group-text" id="basic-addon1">
-              <i className={passwordShown ? "bi bi-eye-slash" : "bi bi-eye"}
-                onClick={togglePasswordVisiblity}></i>
+            <span className="input-group-text" id="basic-addon1" onClick={togglePasswordVisiblity}>
+              <i className={passwordShown ? "bi bi-eye-slash" : "bi bi-eye"}></i>
             </span>
           </InputGroup>
           <small className="text-danger">

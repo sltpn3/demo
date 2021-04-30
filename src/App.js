@@ -10,6 +10,7 @@ import PrivateRoute from "./libs/PrivateRoute";
 import Home from "./pages/Home/Home";
 import Login from './pages/Login/Login';
 import Signup from './pages/Signup/Signup';
+import Dashboard1 from './pages/Dashboard/Dashboard1';
 
 function App(props) {
   let logout_button;
@@ -50,21 +51,9 @@ function App(props) {
               </button>
               <div className="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                  {/* <li className="nav-item">
-                    <Link to="/" className="nav-link active" aria-current="page">Home Page</Link>
-                  </li>
                   <li className="nav-item">
-                    <Link to="/admin" className="nav-link active" aria-current="page">Admin Page</Link>
+                    <Link to="/dashboard1" className="nav-link active" aria-current="page">Dashboard 1</Link>
                   </li>
-                  <li className="nav-item">
-                    <Link to="/dashboard" className="nav-link active" aria-current="page">Dashboard</Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link to="/dashboard2" className="nav-link active" aria-current="page">Dashboard 2</Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link to="/dashboard3" className="nav-link active" aria-current="page">Dashboard 3</Link>
-                  </li> */}
                 </ul>
               </div>
               {logout_button}
@@ -74,10 +63,10 @@ function App(props) {
         <PrivateRoute exact path="/" component={Home} />
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
-        {/* <PrivateRoute path="/admin" component={Admin} />
-        <Route path="/dashboard" component={Dashboard} />
-        <Route path="/dashboard2" component={Dashboard2} />
-        <Route path="/dashboard3" component={Dashboard3} /> */}
+        {/* <PrivateRoute path="/admin" component={Admin} /> */}
+        <PrivateRoute path="/dashboard1" component={Dashboard1} />
+        {/* <Route path="/dashboard2" component={Dashboard2} /> */}
+        {/* <Route path="/dashboard3" component={Dashboard3} /> */}
 
 
       </Router>

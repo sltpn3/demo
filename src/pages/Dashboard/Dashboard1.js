@@ -1,21 +1,45 @@
 import React, { useState, useEffect } from "react";
-import { Form, InputGroup, Input, FormGroup, Label, Button } from 'reactstrap';
-import { YearOptions, MonthOptions, PropinsiOptions, KotaOptions } from '../../libs/Helper';
+import { Input, FormGroup, Label, Button } from 'reactstrap';
+import { YearOptions, MonthOptions, BuildOptions, PropinsiOptions, KotaOptions } from '../../libs/Helper';
 import axios from 'axios';
 
 
 
 function Dashboard1(props) {
-  // const { REACT_APP_API_LOGIN } = process.env;
+  const { REACT_APP_API_LOGIN } = process.env;
 
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [selectedMonth, setSelectedMonth] = useState('01');
   const [selectedPropinsi, setSelectedPropinsi] = useState();
+  const [selectedKota, setSelectedKota] = useState();
+  const [optionsPropinsi, setOptionsPropinsi] = useState();
+  const [optionsKota, setOptionsKota] = useState();
+  // const propinsi = PropinsiOptions();
+
+  // console.log(propinsi);
 
 
   useEffect(() => {
-    // console.log(selectedPropinsi)
+    PropinsiOptions().then(result => {
+      // console.log(result);
+      setOptionsPropinsi(result);
+      setSelectedPropinsi(result[0]['name']);
+      // console.log(selectedPropinsi);
+    }).catch(e => {
+      console.log(e.response);
+    });
   }, [])
+
+  useEffect(() => {
+    KotaOptions({propinsi: selectedPropinsi}).then(result => {
+      // console.log(result);
+      setOptionsKota(result);
+      setSelectedKota(result[0]['name']);
+      // console.log(selectedPropinsi);
+    }).catch(e => {
+      console.log(e);
+    });
+  }, [selectedPropinsi])
 
   const changeYearSelectOptionHandler = (event) => {
     setSelectedYear(event.target.value);
@@ -29,11 +53,16 @@ function Dashboard1(props) {
   const submitHandler = (data) => {
     console.log(selectedYear);
     console.log(selectedMonth);
+    console.log(selectedPropinsi);
+    console.log(selectedKota);
   }
 
   const changePropinsiSelectOption = (event) => {
     // console.log(event.target.value)
     setSelectedPropinsi(event.target.value)
+    // PropinsiOptions().then(result => {
+    //   console.log(result);
+    // });
     // console.log(selectedPropinsi)
   }
 
@@ -60,13 +89,13 @@ function Dashboard1(props) {
               <FormGroup className="mb-2">
                 <Label>Propinsi</Label>
                 <Input type="select" className="pt-2" onChange={changePropinsiSelectOption}>
-                  <PropinsiOptions />
+                  <BuildOptions data={optionsPropinsi} value="name"/>
                 </Input>
               </FormGroup>
               <FormGroup >
                 <Label>Kota</Label>
                 <Input type="select" className="pt-2" onChange={changePropinsiSelectOption}>
-                  <KotaOptions propinsi={selectedPropinsi} />
+                  <BuildOptions data={optionsKota} value="name"/>
                 </Input>
               </FormGroup>
               <div className="text-center mt-2"><Button onClick={submitHandler} color="primary">Submit</Button></div>

@@ -43,133 +43,22 @@ export function MonthOptions() {
 
 }
 
-export function PropinsiOptions() {
-  const [propinsi, setPropinsi] = useState("");
-  let options_propinsi = null;
-  // console.log("123");
+export function BuildOptions(props) {
+  const data = props.data;
+  const value = props.value !== undefined ? props.value : 'value';
+  const display_name = props.display_name !== undefined ? props.display_name : 'display_name';
+  let options = null;
+  if (data) {
+    options = data.map((item, i) => <option key={i} value={item[value]}>{item[display_name]}</option>);
+  }
+  return options;
+}
 
-  useEffect(() => {
-    axios.get(REACT_APP_API_LOGIN + "/propinsi",
-    ).then(result => {
-      // console.log(result)
-      if (result.status === 200) {
-        // console.log(result.data)
-        setPropinsi(result.data.data)
-        // propinsi = result.data;
-      } else {
-        // setIsError(true);
-      }
-    }).catch(e => {
-      // setIsError(true);
-      console.log(e.response);
-      if (e.response) {
-        // setErrorMessage(e.response.data.message)
-      } else {
-        // setErrorMessage('Network Error')
-      }
-    });
-  }, [])
-  // getResponse();
-  // console.log(propinsi)
-  if (propinsi) {
-    // console.log(propinsi[0]['name'])
-    options_propinsi = propinsi.map((item, i) => <option key={i} value={item.name}>{item.display_name}</option>);
-    return options_propinsi;
-  } else {
-    return null;
-  };
+export function PropinsiOptions() {
+  return axios.get(REACT_APP_API_LOGIN + "/propinsi").then(result => result.data.data);
 }
 
 export function KotaOptions(props) {
-  const [kota, setKota] = useState("");
   const propinsi = props.propinsi;
-  let options_kota = null;
-
-  // console.log(props)
-
-  useEffect(() => {
-    console.log(propinsi);
-    axios.get(REACT_APP_API_LOGIN + "/kota/" + propinsi,
-    ).then(result => {
-      // console.log(result)
-      if (result.status === 200) {
-        // console.log(result.data)
-        setKota(result.data.data)
-        // propinsi = result.data;
-      } else {
-        // setIsError(true);
-      }
-    }).catch(e => {
-      // setIsError(true);
-      console.log(e.response);
-      if (e.response) {
-        // setErrorMessage(e.response.data.message)
-      } else {
-        // setErrorMessage('Network Error')
-      }
-    });
-  }, [propinsi])
-
-  if (kota) {
-    // console.log('success');
-    options_kota = kota.map((item, i) => <option key={i} value={item.name}>{item.display_name}</option>);
-    console.log(options_kota);
-    return options_kota;
-  } else {
-    console.log('error')
-    return null;
-  };
-}
-
-export function PropinsiKotaOptions() {
-  const [propinsi, setPropinsi] = useState("");
-  let options_propinsi = null;
-  const [kota, setKota] = useState("");
-  let options_kota = null;
-
-  useEffect(() => {
-    axios.get(REACT_APP_API_LOGIN + "/propinsi",
-    ).then(result => {
-      // console.log(result)
-      if (result.status === 200) {
-        console.log(result.data)
-        setPropinsi(result.data.data)
-        axios.get(REACT_APP_API_LOGIN + "/kota/" + result.data.data[0]['name'],
-        ).then(result => {
-          if (result.status === 200) {
-            setKota(result.data.data)
-          } else {
-
-          }
-        }).catch(e => {
-          if (e.response) {
-
-          } else {
-
-          }
-        });
-        // propinsi = result.data;
-      } else {
-        // setIsError(true);
-      }
-    }).catch(e => {
-      // setIsError(true);
-      console.log(e.response);
-      if (e.response) {
-        // setErrorMessage(e.response.data.message)
-      } else {
-        // setErrorMessage('Network Error')
-      }
-    });
-  }, [])
-
-  if (kota && propinsi) {
-    console.log(kota)
-    console.log(propinsi)
-    options_kota = kota.map((item, i) => <option key={i} value={item.name}>{item.display_name}</option>);
-    options_propinsi = propinsi.map((item, i) => <option key={i} value={item.name}>{item.display_name}</option>);
-    return [options_propinsi, options_kota]
-  }
-
-  return [null, null]
+  return axios.get(REACT_APP_API_LOGIN + "/kota/" + propinsi).then(result => result.data.data);
 }

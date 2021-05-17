@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 
 const { REACT_APP_API_LOGIN } = process.env;
+const { REACT_APP_API_STAT } = process.env;
 
 export function logger(data) {
   if (process.env.NODE_ENV === 'production') return;
@@ -55,10 +56,62 @@ export function BuildOptions(props) {
 }
 
 export function PropinsiOptions() {
-  return axios.get(REACT_APP_API_LOGIN + "/propinsi").then(result => result.data.data);
+  return axios.get(REACT_APP_API_LOGIN + "/propinsi").then(result => {
+    return result.data.data;
+  });
 }
 
 export function KotaOptions(props) {
   const propinsi = props.propinsi;
-  return axios.get(REACT_APP_API_LOGIN + "/kota/" + propinsi).then(result => result.data.data);
+  return axios.get(REACT_APP_API_LOGIN + "/kota/" + propinsi).then(result => {
+    return result.data.data
+  });
+}
+
+export function Stat2ChartData(props) {
+  const year = props.year;
+  const month = props.month;
+  const kota = props.kota;
+  return axios.get(REACT_APP_API_STAT + "/stat2", { params: { pub_year: year, pub_month: year + month, kota: kota } }).then(result => {
+    let new_case = [];
+    let recovered = [];
+    let death = [];
+    new_case = result.data.data.map((item, i) => item['new_case']);
+    recovered = result.data.data.map((item, i) => item['recovered']);
+    death = result.data.data.map((item, i) => item['death']);
+    console.log(new_case);
+    let data = {
+      labels: result.data.labels,
+      datasets: [
+        {
+          type: 'bar',
+          label: 'New Case',
+          borderColor: 'rgb(54, 162, 235)',
+          backgroundColor: 'rgb(54, 162, 235)',
+          borderWidth: 0,
+          fill: false,
+          data: new_case,
+        },
+        {
+          type: 'bar',
+          label: 'Recovered',
+          borderColor: 'rgb(255, 99, 132)',
+          backgroundColor: 'rgb(255, 99, 132)',
+          borderWidth: 0,
+          fill: false,
+          data: recovered,
+        },
+        {
+          type: 'bar',
+          label: 'Death',
+          borderColor: 'green',
+          backgroundColor: 'green',
+          borderWidth: 0,
+          fill: false,
+          data: death,
+        },
+      ],
+    };
+    return data
+  });
 }

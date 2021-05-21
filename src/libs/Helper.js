@@ -86,8 +86,8 @@ export function Stat2ChartData(props) {
         {
           type: 'bar',
           label: 'New Case',
-          borderColor: 'rgb(54, 162, 235)',
-          backgroundColor: 'rgb(54, 162, 235)',
+          borderColor: 'rgb(54, 162, 235, 1.0)',
+          backgroundColor: 'rgb(54, 162, 235, 1.0)',
           borderWidth: 0,
           fill: false,
           data: new_case,
@@ -95,8 +95,8 @@ export function Stat2ChartData(props) {
         {
           type: 'bar',
           label: 'Recovered',
-          borderColor: 'rgb(255, 99, 132)',
-          backgroundColor: 'rgb(255, 99, 132)',
+          borderColor: 'green',
+          backgroundColor: 'green',
           borderWidth: 0,
           fill: false,
           data: recovered,
@@ -104,11 +104,49 @@ export function Stat2ChartData(props) {
         {
           type: 'bar',
           label: 'Death',
-          borderColor: 'green',
-          backgroundColor: 'green',
+          borderColor: 'rgba(255, 99, 132, 1)',
+          backgroundColor: 'rgba(255, 99, 132, 1)',
           borderWidth: 0,
           fill: false,
           data: death,
+        },
+      ],
+    };
+    return data
+  });
+}
+
+export function Stat2PieChartData(props) {
+  const year = props.year;
+  const month = props.month;
+  const kota = props.kota;
+  return axios.get(REACT_APP_API_STAT + "/stat2_pie", { params: { pub_year: year, pub_month: year + month, kota: kota } }).then(result => {
+    let new_case = [];
+    let recovered = [];
+    let death = [];
+    // new_case = result.data.data['new_case']
+    // recovered = result.data.data.map((item, i) => item['recovered']);
+    // death = result.data.data.map((item, i) => item['death']);
+    console.log(result.data.data);
+    let data = {
+      labels: ['New Case', 'Recovered', 'Death'],
+      datasets: [
+        {
+          label: '',
+          data: [result.data.data['new_case'],
+          result.data.data['recovered'],
+          result.data.data['death']],
+          backgroundColor: [
+            'rgba(54, 162, 235, 1.0)',
+            'green',
+            'rgba(255, 99, 132, 1.0)',
+          ],
+          borderColor: [
+            'rgba(54, 162, 235, 1)',
+            'green',
+            'rgba(255, 99, 132, 1)',
+          ],
+          borderWidth: 1,
         },
       ],
     };

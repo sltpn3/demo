@@ -1,11 +1,34 @@
 import React, { useState, useEffect } from "react";
 import { Input, FormGroup, Label, Button } from 'reactstrap';
-import { YearOptions, MonthOptions, BuildOptions, PropinsiOptions, KotaOptions, Stat2ChartData } from '../../libs/Helper';
+import { YearOptions, MonthOptions, BuildOptions, PropinsiOptions, KotaOptions } from '../../libs/Helper';
+import { Stat2ChartData, Stat2PieChartData } from '../../libs/Helper';
 import axios from 'axios';
-import { Bar, Line } from 'react-chartjs-2';
+import { Bar, Pie } from 'react-chartjs-2';
 // import LineGraph from '../../charts/Line';
 
 const rand = () => Math.round(Math.random() * 20 - 10);
+
+const data_pie = {
+  labels: ['New Case', 'Recovered', 'Death'],
+  datasets: [
+    {
+      label: '',
+      data: [0, 0, 0],
+      backgroundColor: [
+        'rgba(54, 162, 235, 1.0)',
+        'green',
+        'rgba(255, 99, 132, 1.0)',
+      ],
+      borderColor: [
+        'rgba(54, 162, 235, 1)',
+        'green',
+        'rgba(255, 99, 132, 1)',
+      ],
+      borderWidth: 1,
+    },
+  ],
+};
+
 
 const data = {
   labels: [],
@@ -22,8 +45,8 @@ const data = {
     {
       type: 'bar',
       label: 'Recovered',
-      borderColor: 'rgb(255, 99, 132)',
-      backgroundColor: 'rgb(255, 99, 132)',
+      borderColor: 'green',
+      backgroundColor: 'green',
       borderWidth: 0,
       fill: false,
       data: [],
@@ -31,8 +54,8 @@ const data = {
     {
       type: 'bar',
       label: 'Death',
-      borderColor: 'green',
-      backgroundColor: 'green',
+      borderColor: 'rgba(255, 99, 132, 1)',
+      backgroundColor: 'rgba(255, 99, 132, 1)',
       borderWidth: 0,
       fill: false,
       data: [],
@@ -51,6 +74,7 @@ function Dashboard1(props) {
   const [optionsPropinsi, setOptionsPropinsi] = useState();
   const [optionsKota, setOptionsKota] = useState();
   const [stat2ChartData, setStat2ChartData] = useState(data)
+  const [stat2PieChartData, setStat2PieChartData] = useState(data_pie)
   // const propinsi = PropinsiOptions();
 
   // console.log(propinsi);
@@ -95,6 +119,9 @@ function Dashboard1(props) {
     Stat2ChartData({ year: selectedYear, month: selectedMonth, kota: selectedKota }).then(result => {
       console.log(result)
       setStat2ChartData(result)
+    })
+    Stat2PieChartData({ year: selectedYear, month: selectedMonth, kota: selectedKota }).then(result => {
+      setStat2PieChartData(result)
     })
   }
 
@@ -145,7 +172,7 @@ function Dashboard1(props) {
           <div className="col">
             <div className="row h-50">
               <div className="col-6 h-100">
-                {/* <Bar data={data} options={{ maintainAspectRatio: true }} /> */}
+              <Pie data={stat2PieChartData} />
               </div>
               <div className="col-6 h-100 overflow-auto">
                 <p>

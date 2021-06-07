@@ -8,6 +8,7 @@ import './css/bootstrap-icons.css';
 import { AuthContext } from "./context/auth";
 import PrivateRoute from "./libs/PrivateRoute";
 import Home from "./pages/Home/Home";
+import HomeMaps from "./pages/Home/HomeMaps";
 import Login from './pages/Login/Login';
 import Signup from './pages/Signup/Signup';
 import Dashboard1 from './pages/Dashboard/Dashboard1';
@@ -60,7 +61,7 @@ function App(props) {
             </div>
           </nav>
         </div>
-        <PrivateRoute exact path="/" component={Home} />
+        <PrivateRoute exact path="/" component={HomeMaps} />
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
         {/* <PrivateRoute path="/admin" component={Admin} /> */}

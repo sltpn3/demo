@@ -32,8 +32,8 @@ const MapChart = ({ setTooltipContent }) => {
                     key={geo.rsmKey}
                     geography={geo}
                     onMouseEnter={() => {
-                      const { PROVINSI, KABKOT, PROVNO, KABKOTNO } = geo.properties;
-                      setTooltipContent(`${PROVNO}.${KABKOTNO} - ${KABKOT} - ${PROVINSI}`);
+                      const { PROV, KABKOT, PROVNO, KABKOTNO } = geo.properties;
+                      setTooltipContent(`${PROVNO}.${KABKOTNO} - ${KABKOT} - ${PROV}`);
                     }}
                     onMouseLeave={() => {
                       setTooltipContent("");
